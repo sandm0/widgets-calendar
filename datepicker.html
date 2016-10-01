@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="zh-Cn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge,chrome=1">
+    <title>datepicker</title>
+    <link rel="stylesheet" href="http://cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css">
+    <link rel="stylesheet" href="./calendar.css">
+</head>
+
+<body>
+    <div class="date-pick">
+        <label>
+            <i class="fa fa-calendar fa-1x"></i>
+            <input type="text" id="date-start" placeholder="请选择日期,如 2016/9/30">
+        </label>
+    </div>
+    <div class="container"></div>
+    <script src="http://cdn.staticfile.org/jquery/2.2.1/jquery.min.js"></script>
+    <script>
+        function DatePicker($target) {
+            this.init($target);
+            this.render();
+            this.setData();
+            this.bind();
+        }
+
+        DatePicker.prototype = {
+            init: function($target) {
+                this.date = new Date();
+                this.$target = $target;
+            },
+            render: function() {
+
+                //渲染固定样式模板
+                var tpl = '<div class="ui-calendar" style="display:none">' +
+                    '<div class="ui-calendar-header"><span class="pre caret-left"></span><span class="calendar-date">2016年7月</span><span class="next caret-right"></span></div>' +
+                    '<div class="ui-canlendar-content"><table class="panel"><thead><tr><th>日</th><th>一</th><th>二</th><th>三</th><th>四</th><th>五</th><th>六</th></tr></thead><tbody></tbody></table></div>' +
+                    '</div>';
+                this.$datepicker = $(tpl);
+                var $dateInput = $('.date-pick'),
+                    offsetL = $dateInput.offset().left,
+                    offsetT = $dateInput.offset().top;
+                $('.container').offset({
+                    left: offsetL,
+                    top: offsetT
+                });
+                $('.container').append(this.$datepicker);
+            },
+            setData: function() {
+                this.$datepicker.find('tbody').html('');
+                this.$datepicker.find('.calendar-date').text(this.date.getFullYear() + '年' + (this.date.getMonth() + 1) + '月');
+
+                var firstDate = getFirstDate(this.date),
+                    lastDate = getLastDate(this.date),
+                    dateArr = [];
+
+                // 组装日期数据数组
+                for (var i = firstDate.getDay(); i > 0; i--) {
+                    var d = new Date(firstDate.getTime() - i * 24 * 3600 * 1000);
+                    dateArr.push({
+                        type: 'pre-month',
+                        date: d
+                    });
+                }
+
+                for (var j = 0; j < lastDate.getDate(); j++) {
+                    var d = new Date(firstDate.getTime() + j * 24 * 3600 * 1000)
+                    dateArr.push({
+                        type: 'cur-month',
+                        date: d
+                    });
+                }
+
+                for (var k = 1; k < 7 - lastDate.getDay(); k++) {
+                    var d = new Date(lastDate.getTime() + k * 24 * 3600 * 1000);
+                    dateArr.push({
+                        type: 'next-month',
+                        date: d
+                    });
+                }
+
+                //拼装日期面板字符串
+                var tpl = '';
+                for (var l = 0; l < dateArr.length; l++) {
+                    if (l % 7 === 0) {
+                        tpl += '<tr>';
+                    }
+
+                    tpl += '<td class = "' + dateArr[l].type;
+                    if (this.getYYMMDD(new Date()) === this.getYYMMDD(dateArr[l].date)) {
+                        tpl += ' cur-date';
+                    }
+                    tpl += '"';
+                    tpl += 'data-date="' + this.getYYMMDD(dateArr[l].date) + '">';
+
+                    var date = String(dateArr[l].date.getDate());
+                    date = date.length === 2 ? date : '0' + date;
+                    tpl += date + '</td>';
+
+                    if (l % 7 === 6) {
+                        tpl += '</tr>';
+                    }
+                }
+
+
+                function getFirstDate(date) {
+                    date.setDate(1);
+                    return date;
+                }
+
+                function getLastDate(date) {
+                    var year = date.getFullYear(),
+                        month = date.getMonth() + 1,
+                        newMonth = month++,
+                        newYear = year;
+
+                    if (month > 12) {
+                        newMonth = 0;
+                        newYear++;
+                    }
+
+                    var newDate = new Date(newYear, newMonth, 1);
+
+                    date = new Date(newDate.getTime() - 24 * 3600 * 1000);
+                    return date;
+
+                }
+
+                //填充日期数据并显示日历
+                this.$datepicker.find('.panel tbody').html(tpl);
+            },
+            bind: function() {
+                var _self = this;
+                this.$datepicker.find('.pre.caret-left').on('click', function() {
+                    var year = _self.date.getFullYear(),
+                        month = _self.date.getMonth(),
+                        newYear = year,
+                        newMonth = month;
+                    newMonth--;
+                    if (month < 0) {
+                        newMonth = 11;
+                        newYear--;
+                    }
+                    _self.date.setFullYear(newYear);
+                    _self.date.setMonth(newMonth);
+                    _self.setData()
+                });
+                this.$datepicker.find('.next.caret-right').on('click', function() {
+                    var year = _self.date.getFullYear(),
+                        month = _self.date.getMonth(),
+                        newYear = year,
+                        newMonth = month;
+                    newMonth++;
+                    if (month > 11) {
+                        newMonth = 0;
+                        newYear++;
+                    }
+                    _self.date.setFullYear(newYear);
+                    _self.date.setMonth(newMonth);
+                    _self.setData()
+                });
+                this.$datepicker.find('td').on('click',function(){
+                    _self.$target.val($(this).attr('data-date'));
+                    _self.$datepicker.hide();
+                    var $dateInput = $('.date-pick'),
+                        offsetL = $dateInput.offset().left,
+                        offsetT = $dateInput.offset().top;
+                    $('.container').offset({
+                        left: offsetL,
+                        top: offsetT
+                    });
+                })
+                this.$target.on('click', function() {
+                    if (_self.$datepicker.is(':hidden')) {
+                        _self.$datepicker.fadeIn(400);
+                        $('.container').animate({
+                            top: '+=40'
+                        }, 400)
+                    }
+                });
+
+
+            },
+            getYYMMDD: function(date) {
+                return date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
+            }
+        }
+
+        new DatePicker($('#date-start'));
+
+
+        //$.fn.datepicker=function(){...}; $('#date-start').datepicker();作为jauery插件调用
+    </script>
+</body>
+
+</html>

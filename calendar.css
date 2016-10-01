@@ -1,0 +1,103 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+    color: #333;
+    font-family: "Arial", "Microsoft YaHei", "黑体", "宋体", sans-serif;
+}
+.container{
+    position: absolute;
+}
+.date-pick {
+    width: 200px;
+    padding: 4px 4px 4px 26px;
+    margin: 0 auto;
+    margin-top: 40px;
+    border: 1px solid #c3c3c3;
+    border-radius: 4px;
+    line-height: 28px;
+    position: relative;
+}
+.date-pick i {
+    left: 8px;
+    top: 11px;
+    position: absolute;
+    color: #199cf0;
+}
+.date-pick input[type="text"] {
+    border-style: none;
+    text-indent: 1em;
+}
+
+.date-pick input[type="text"]:focus {
+    outline: none;
+}
+
+/*日历组件样式*/
+.ui-calendar {
+    position：absulute;
+    padding-bottom: 4px;
+    width: 400px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 0 5px rgba(0,2px,10px,.2);
+}
+.ui-calendar-header {
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    background-color: #f2164b;
+    border-bottom: 1px solid #D2D2D2;
+    box-shadow: inset 0 2px 1px rgba(255,255,255,0.2);
+}
+.ui-calendar-header .calendar-date {
+   font-size: 16px;
+   color: #fff;
+}
+.ui-calendar .caret-left {
+    float: left;
+    margin-top: 13px;
+    margin-left: 10px;
+    border-top: 7px solid transparent;
+    border-bottom: 7px solid transparent;
+    border-right: 7px solid #fff;
+    width: 0;
+    height: 0;
+    cursor: pointer;
+}
+.ui-calendar .caret-right {
+    float: right;
+    margin-top: 13px;
+    margin-right: 10px;
+    border-top: 7px solid transparent;
+    border-bottom: 7px solid transparent;
+    border-left: 7px solid #fff;
+    b width: 0;
+    height: 0;
+    cursor: pointer;
+}
+.ui-calendar .panel {
+    width: 100%;
+    text-align: center;
+}
+.ui-calendar .panel th {
+    line-height: 2.4;
+}
+.ui-calendar .panel td {
+    line-height: 2;
+}
+.ui-calendar .pre-month, .ui-calendar .next-month {
+    color: #eee;
+}
+.ui-calendar .cur-month {
+    color: #333;
+    cursor: pointer;
+}
+.ui-calendar .cur-month:hover {
+    background-color: #f94973;
+    color: #fff;
+}
+.ui-calendar .cur-date {
+    color: #ed3b56;
+}
