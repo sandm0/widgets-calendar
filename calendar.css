@@ -41,7 +41,7 @@
     border: 1px solid #ccc;
     border-radius: 4px;
     overflow: hidden;
-    box-shadow: 0 0 5px rgba(0,2px,10px,.2);
+    box-shadow: 0 2px 10px rgba(0,0,0,.2);
 }
 .ui-calendar-header {
     height: 40px;
