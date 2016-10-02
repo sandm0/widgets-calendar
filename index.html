@@ -146,7 +146,8 @@
                     }
                     _self.date.setFullYear(newYear);
                     _self.date.setMonth(newMonth);
-                    _self.setData()
+                    _self.setData();
+                    _self.bind();
                 });
                 this.$datepicker.find('.next.caret-right').on('click', function() {
                     var year = _self.date.getFullYear(),
@@ -160,7 +161,8 @@
                     }
                     _self.date.setFullYear(newYear);
                     _self.date.setMonth(newMonth);
-                    _self.setData()
+                    _self.setData();
+                    _self.bind();
                 });
                 this.$datepicker.find('td').on('click',function(){
                     _self.$target.val($(this).attr('data-date'));
